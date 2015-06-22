@@ -220,7 +220,8 @@ module Cms
           self.skip_callbacks = false
           unless different_from_last_draft?
             logger.debug { "No difference between this version and last. Skipping save" }
-            if !published && publish_on_save
+
+            if self.class.publishable? && publish_on_save && !published
               logger.debug { "Publishing current draft version" }
               return publish
             else
