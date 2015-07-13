@@ -28,25 +28,6 @@
     %>
 
     <div class="btn-group">
-      <% if @page.respond_to?(:current_task) %>
-          <% unless @page.current_task %>
-              <%= link_to "Assign",
-                          cms.new_page_task_path(@page),
-                          :id => "assign_button",
-                          :target => "_top",
-                          :align => 'none',
-                          class: 'btn btn-small',
-                          :enabled => !(@page.assigned_to == current_user || !current_user.able_to_edit?(@page))
-              %>
-          <% else %>
-              <%= link_to "Complete Task",
-                          cms.complete_task_path(@page.current_task),
-                          :id => "complete_task_button",
-                          class: 'http_put btn btn-small',
-                          :target => "_top",
-                          :enabled => !(@page.assigned_to != current_user || !current_user.able_to_edit?(@page)) %>
-          <% end %>
-      <% end %>
       <%= link_to "Versions",
                   engine(@page).polymorphic_path([:versions, @page]),
                   :target => "_top",

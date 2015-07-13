@@ -47,10 +47,10 @@ module Cms
     end
 
     def guest_accessible_icon_tag(parent, content)
-      unless content.accessible_to_guests?(@public_sections, parent)
-        '<span aria-hidden="true" class="permission-icon icon-locked"></span>'.html_safe
-      else
+      if content.accessible_to_guests?(@public_sections, parent)
         ''
+      else
+        '<span aria-hidden="true" class="permission-icon icon-locked"></span>'.html_safe
       end
     end
 

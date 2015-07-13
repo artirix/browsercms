@@ -14,7 +14,6 @@ class Cms::Page < ActiveRecord::Base
 
   has_many :connectors, -> { order("#{Cms::Connector.table_name}.container, #{Cms::Connector.table_name}.position") }, :class_name => 'Cms::Connector'
   has_many :page_routes, :class_name => 'Cms::PageRoute'
-  has_many :tasks
 
   extend Cms::DefaultAccessible
 
@@ -395,14 +394,6 @@ class Cms::Page < ActiveRecord::Base
     return @top_level_section if @top_level_section
     a = ancestors
     @top_level_section = (a.size > 0 && a[1]) ? a[1] : Cms::Section.root.first
-  end
-
-  def current_task
-    tasks.incomplete.first
-  end
-
-  def assigned_to
-    current_task ? current_task.assigned_to : nil
   end
 
   def assigned_to?(user)

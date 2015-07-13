@@ -182,9 +182,9 @@ module Cms::ControllerTestHelper
   end
 end
 
-class ActionController::TestCase
-  include Devise::TestHelpers
-end
+# class ActionController::TestCase
+#   include Devise::TestHelpers
+# end
 
 module Cms::IntegrationTestHelper
   def login_as(user, password = "password")

@@ -2,6 +2,7 @@
 require 'rails'
 require 'cms/configuration'
 require 'cms/version'
+require 'cancancan'
 require 'browsercms'
 
 require 'sass-rails'
@@ -24,8 +25,9 @@ require 'will_paginate/active_record'
 require 'actionpack/page_caching'
 require 'panoramic'
 require 'simple_form'
-require 'devise'
 
+require 'cms/users_service'
+require 'cms/ability'
 require 'cms/engine'
 require 'cms/extensions'
 require 'cms/route_extensions'
@@ -65,7 +67,7 @@ require 'cms/behaviors'
 require 'cms/concerns'
 
 
-ActiveRecord::Base.send(:include, Cms::Acts::CmsUser)
+# ActiveRecord::Base.send(:include, Cms::Acts::CmsUser)
 require 'cms/responders/content_responder'
 
 require "panoramic"

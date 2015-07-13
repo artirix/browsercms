@@ -89,7 +89,7 @@ module Cms
       # Initialization
       require 'cms/configure_simple_form'
       require 'cms/configure_simple_form_bootstrap'
-      require 'cms/configuration/devise'
+      # require 'cms/configuration/devise' if defined? ::Devise
 
       # Sets the default .css file that will be added to forms created via the Forms module.
       # Projects can override this as needed.
@@ -98,7 +98,7 @@ module Cms
     end
 
     # Needed to ensure routes added to the main app by the Engine are available. (Since engine draws its routes after the main app)
-    # Borrrow from Spree as documenented here: https://github.com/rails/rails/issues/11895
+    # Borrow from Spree as documented here: https://github.com/rails/rails/issues/11895
     config.after_initialize do
       Rails.application.routes_reloader.reload!
     end

@@ -58,9 +58,21 @@ module Cms
       # Returns the current user if logged in. If no user is logged in, returns the 'Guest' user which represents a
       # what a visitor can do without being logged in.
       def current_user
-        @current_user ||= begin
-          Cms::PersistentUser.current = current_cms_user || Cms::User.guest
-        end
+        @current_user ||= load_current_user
+      end
+
+      def load_current_user
+        # Cms::PersistentUser.current = current_cms_user || Cms::User.guest
+
+        # extract on Cms::ExternalUser docs
+        #
+        # if SouthparkCrm::Client.authenticate(params[:login], params[:password])
+        #   user = Cms::ExternalUser.authenticate('stan.marsh', 'southpark-crm')
+        #   user.authorize('cms-admin')
+        # end
+
+        # binding.pry
+        UsersService.current = UsersService.global_user
       end
 
       # Redirect as appropriate when an access request fails.
@@ -96,22 +108,22 @@ module Cms
         session[:return_to] = nil
       end
 
-      # This is ususally what you want; resetting the session willy-nilly wreaks
-      # havoc with forgery protection, and is only strictly necessary on login.
-      # However, **all session state variables should be unset here**.
-      def logout_keeping_session!
-        # Kill server-side auth cookie
-        Cms::PersistentUser.current.forget_me if Cms::User.current.is_a? User
-        Cms::PersistentUser.current = false # not logged in, and don't do it for me
-        session[:user_id] = nil # keeps the session but kill our variable
-        # explicitly kill any other session variables you set
-      end
+      # # This is ususally what you want; resetting the session willy-nilly wreaks
+      # # havoc with forgery protection, and is only strictly necessary on login.
+      # # However, **all session state variables should be unset here**.
+      # def logout_keeping_session!
+      #   # Kill server-side auth cookie
+      #   Cms::PersistentUser.current.forget_me if Cms::User.current.is_a? User
+      #   Cms::PersistentUser.current = false # not logged in, and don't do it for me
+      #   session[:user_id] = nil # keeps the session but kill our variable
+      #   # explicitly kill any other session variables you set
+      # end
 
       # The session should only be reset at the tail end of a form POST --
       # otherwise the request forgery protection fails. It's only really necessary
       # when you cross quarantine (logged-out to logged-in).
       def logout_killing_session!
-        logout_keeping_session!
+        # logout_keeping_session!
         reset_session
       end
 

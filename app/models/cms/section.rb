@@ -20,8 +20,8 @@ module Cms
       super + [:allow_groups, group_ids: []]
     end
 
-    has_many :group_sections, :class_name => 'Cms::GroupSection'
-    has_many :groups, :through => :group_sections, :class_name => 'Cms::Group'
+    # has_many :group_sections, :class_name => 'Cms::GroupSection'
+    # has_many :groups, :through => :group_sections, :class_name => 'Cms::Group'
 
     scope :root, -> { where(['root = ?', true]) }
     scope :system, -> { where({:name => 'system'}) }

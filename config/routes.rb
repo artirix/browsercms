@@ -10,20 +10,20 @@ Cms::Engine.routes.draw do
   get '/content_library', :to => "html_blocks#index", :as => 'content_library'
   get '/administration', :to => "users#index", :as => 'administration'
 
-  devise_for :cms_users,
-             skip: [:sessions],
-             path: :users,
-             class_name: 'Cms::PersistentUser',
-             controllers: {passwords: 'cms/passwords'},
-             module: :devise
-
-  devise_scope :cms_user do
-    get '/login' => "sessions#new", :as => 'login'
-    get '/login' => "sessions#new", :as => :new_cms_user_session
-    post '/login' => "sessions#create", :as => :cms_user_session
-    get '/logout' => "sessions#destroy", :as => 'logout'
-
-  end
+  # devise_for :cms_users,
+  #            skip: [:sessions],
+  #            path: :users,
+  #            class_name: 'Cms::PersistentUser',
+  #            controllers: {passwords: 'cms/passwords'},
+  #            module: :devise
+  #
+  # devise_scope :cms_user do
+  #   get '/login' => "sessions#new", :as => 'login'
+  #   get '/login' => "sessions#new", :as => :new_cms_user_session
+  #   post '/login' => "sessions#create", :as => :cms_user_session
+  #   get '/logout' => "sessions#destroy", :as => 'logout'
+  #
+  # end
 
   get '/toolbar', :to => "toolbar#index", :as => 'toolbar'
 

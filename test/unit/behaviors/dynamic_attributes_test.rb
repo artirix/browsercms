@@ -26,8 +26,7 @@ class DynamicAttributesTest < ActiveSupport::TestCase
   end
 
   test "blocks should not have dynamic_attributes" do
-    assert !Cms::User.has_dynamic_attributes?
-
+    refute Cms::HtmlBlock.has_dynamic_attributes?
   end
 
   test "models should have dynamic_attributes if specified" do

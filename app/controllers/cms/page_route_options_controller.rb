@@ -9,7 +9,7 @@ class PageRouteOptionsController < Cms::BaseController
   end
   
   def create
-    @model = resource.new(params[object_name])
+    @model = resource.new(model_params)
     if @model.save
       flash[:notice] = "#{object_name.titleize} added"
       redirect_to cms_page_route_url(@page_route)
@@ -19,14 +19,18 @@ class PageRouteOptionsController < Cms::BaseController
   end
   
   def update
-    if @model.update_attributes(params[object_name])
+    if @model.update_attributes(model_params)
       flash[:notice] = "#{object_name.titleize} updated"
       redirect_to cms_page_route_url(@page_route)
     else
       render :action => "edit"
     end
   end
-  
+
+  def model_params
+    params[object_name]
+  end
+
   def destroy
     @model.destroy
     flash[:notice] = "#{object_name.titleize} deleted"

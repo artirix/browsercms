@@ -27,6 +27,28 @@ module Cms
     def reserved_paths
       @reserved_paths ||= ["/cms", "/cache"]
     end
+
+    # User Class
+    attr_writer :user_class_name
+    def user_class_name
+      @user_class_name ||= 'Cms::DefaultUser'
+    end
+
+    def user_class
+      user_class_name.to_s.constantize
+    end
+
+    # User key
+    attr_writer :user_key
+    def user_key
+      @user_key ||= :login
+    end
+
+    # User name field
+    attr_writer :user_name_field
+    def user_name_field
+      @user_name_field ||= :full_name
+    end
   end
 
   module Errors

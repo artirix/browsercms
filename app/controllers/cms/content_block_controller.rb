@@ -23,12 +23,12 @@ module Cms
     end
 
     def bulk_update
-      ids = params[:content_id] || []
+      ids    = params[:content_id] || []
       models = ids.collect do |id|
         model_class.find(id.to_i)
       end
       if params[:commit] == 'Delete'
-        deleted = models.select do |m|
+        deleted        = models.select do |m|
           m.destroy
         end
         flash[:notice] = "Deleted #{deleted.size} records."
@@ -103,7 +103,7 @@ module Cms
       do_command("deleted") { @block.destroy }
       respond_to do |format|
         format.html { redirect_to_first params[:_redirect_to], engine_aware_path(@block.class) }
-        format.json { render :json => {:success => true} }
+        format.json { render :json => { :success => true } }
       end
 
     end
@@ -159,6 +159,7 @@ module Cms
     def model_form_name
       content_type.param_key
     end
+
     alias :resource_param :model_form_name
 
     def resource
@@ -172,7 +173,7 @@ module Cms
 
       options = {}
 
-      options[:page] = params[:page]
+      options[:page]  = params[:page]
       options[:order] = model_class.default_order if model_class.respond_to?(:default_order)
       options[:order] = params[:order] unless params[:order].blank?
 
@@ -184,7 +185,7 @@ module Cms
         scope = scope.with_parent_id(params[:section_id])
       end
       @total_number_of_items = scope.count
-      @blocks = scope.paginate(options)
+      @blocks                = scope.paginate(options)
       check_permissions
 
     end
@@ -234,7 +235,7 @@ module Cms
     end
 
     def after_create_on_success
-      block = @block.class.versioned? ? @block.draft : @block
+      block          = @block.class.versioned? ? @block.draft : @block
       flash[:notice] = "#{content_type.display_name} '#{block.name}' was created"
       if @block.class.connectable? && @block.connected_page
         redirect_to @block.connected_page.path
@@ -261,7 +262,7 @@ module Cms
     # update related methods
     def update_block
       load_block
-      @block.update_attributes(model_params())
+      @block.update_attributes(model_params)
     end
 
     # Returns the parameters for the block to be saved.
@@ -304,6 +305,7 @@ module Cms
       begin
         @block.revert_to(to_version)
       rescue Exception => @exception
+        Cms::ErrorHandling::NotifierService.notify @exception
         logger.warn "Could not revert #{@block.inspect} to version #{to_version}"
         logger.warn "#{@exception.message}\n:#{@exception.backtrace.join("\n")}"
         false
@@ -316,14 +318,14 @@ module Cms
     # are connected to.
     def check_permissions
       case action_name
-        when "index", "show", "new", "create", "version", "versions"
-          # Allow
-        when "edit", "update", "inline"
-          raise Cms::Errors::AccessDenied unless current_user.able_to_edit?(@block)
-        when "destroy", "publish", "revert_to"
-          raise Cms::Errors::AccessDenied unless current_user.able_to_publish?(@block)
-        else
-          raise Cms::Errors::AccessDenied
+      when "index", "show", "new", "create", "version", "versions"
+        # Allow
+      when "edit", "update", "inline"
+        raise Cms::Errors::AccessDenied unless current_user.able_to_edit?(@block)
+      when "destroy", "publish", "revert_to"
+        raise Cms::Errors::AccessDenied unless current_user.able_to_publish?(@block)
+      else
+        raise Cms::Errors::AccessDenied
       end
     end
 
@@ -352,7 +354,7 @@ module Cms
     end
 
     def render_toolbar_and_iframe
-      @page = @block
+      @page       = @block
       @page_title = @block.page_title
       render "show", :layout => 'cms/page_editor'
     end

@@ -11,7 +11,7 @@ FactoryGirl.define do
     m.name "My Site"
     m.path "/"
     m.root true
-    m.groups { Cms::Group.all }
+    # m.groups { Cms::Group.all }
   end
 
   factory :category_type, :class => Cms::CategoryType do |m|
@@ -61,31 +61,31 @@ FactoryGirl.define do
 
   end
 
-  factory :group, :class => Cms::Group do |m|
-    m.sequence(:name) { |n| "TestGroup#{n}" }
-  end
-
-  factory :cms_user_group, :class => Cms::Group do |m|
-    m.sequence(:name) { |n| "TestGroup#{n}" }
-    m.association :group_type, :factory => :cms_group_type
-  end
-
-  factory :content_editor_group, :parent => :group do |g|
-    g.after(:create) { |group|
-      group.permissions << create_or_find_permission_named("administrate")
-      group.permissions << create_or_find_permission_named("edit_content")
-      group.permissions << create_or_find_permission_named("publish_content")
-    }
-  end
-
-  factory :group_type, :class => Cms::GroupType do |m|
-    m.sequence(:name) { |n| "TestGroupType#{n}" }
-  end
-
-  factory :cms_group_type, :class => Cms::GroupType do |m|
-    m.name "CMS User"
-    m.cms_access true
-  end
+  # factory :group, :class => Cms::Group do |m|
+  #   m.sequence(:name) { |n| "TestGroup#{n}" }
+  # end
+  #
+  # factory :cms_user_group, :class => Cms::Group do |m|
+  #   m.sequence(:name) { |n| "TestGroup#{n}" }
+  #   m.association :group_type, :factory => :cms_group_type
+  # end
+  #
+  # factory :content_editor_group, :parent => :group do |g|
+  #   g.after(:create) { |group|
+  #     group.permissions << create_or_find_permission_named("administrate")
+  #     group.permissions << create_or_find_permission_named("edit_content")
+  #     group.permissions << create_or_find_permission_named("publish_content")
+  #   }
+  # end
+  #
+  # factory :group_type, :class => Cms::GroupType do |m|
+  #   m.sequence(:name) { |n| "TestGroupType#{n}" }
+  # end
+  #
+  # factory :cms_group_type, :class => Cms::GroupType do |m|
+  #   m.name "CMS User"
+  #   m.cms_access true
+  # end
 
   factory :portlet, :class => DynamicPortlet do |m|
     m.name "Sample Portlet"
@@ -144,12 +144,12 @@ FactoryGirl.define do
 </html>}
   end
 
-  Cms::Authoring::PERMISSIONS.each do |p|
-    perm_name = "#{p.to_s}_permission".to_sym
-    factory perm_name, :class => Cms::Permission do |m|
-      m.name p
-    end
-  end
+  # Cms::Authoring::PERMISSIONS.each do |p|
+  #   perm_name = "#{p.to_s}_permission".to_sym
+  #   factory perm_name, :class => Cms::Permission do |m|
+  #     m.name p
+  #   end
+  # end
 
   factory :section, :class => Cms::Section do |m|
     m.name "Test"
@@ -189,62 +189,62 @@ FactoryGirl.define do
 
   end
 
-  factory :permission, :class => Cms::Permission do |m|
-    m.sequence(:name) { |n| "TestPermission#{n}" }
-  end
+  # factory :permission, :class => Cms::Permission do |m|
+  #   m.sequence(:name) { |n| "TestPermission#{n}" }
+  # end
 
   factory :site, :class => Cms::Site do |m|
     m.sequence(:name) { |n| "Test #{n}" }
     m.domain { |a| "#{a.name.gsub(/\s/, "_").downcase}.com" }
   end
 
-  factory :task, :class => Cms::Task do |m|
-    m.association :assigned_by, :factory => :cms_admin
-    m.association :assigned_to, :factory => :cms_admin
-    m.association :page
-  end
+  # factory :task, :class => Cms::Task do |m|
+  #   m.association :assigned_by, :factory => :cms_admin
+  #   m.association :assigned_to, :factory => :cms_admin
+  #   m.association :page
+  # end
 
-  factory :user, :class => Cms::User do |m|
-    m.first_name "Test"
-    m.last_name "User"
-    m.sequence(:login) { |n| "test_#{n}" }
-    m.email { |a| "#{a.login}@example.com" }
-    m.password "password"
-    m.password_confirmation { |a| a.password }
-  end
-
-# Represents a user who has actually created an account on the site.
-  factory :registered_user, :parent => :user do |u|
-    u.after(:create) { |user|
-      user.groups << Cms::Group.guest
-    }
-  end
-
-  factory :disabled_user, parent: :user do |u|
-    u.after(:create) { |user|
-      user.disable!
-    }
-  end
-
-  factory :cms_admin, :parent => :user do |m|
-    m.after(:create) { |user|
-      group = FactoryGirl.create(:group, :group_type => FactoryGirl.create(:group_type, :cms_access => true))
-      Cms::Authoring::PERMISSIONS.each do |p|
-        group.permissions << create_or_find_permission_named(p)
-      end
-      user.groups << group
-    }
-  end
-
-  factory :content_editor, :parent => :user do |m|
-    m.after(:create) { |user|
-      group = FactoryGirl.create(:group, :group_type => FactoryGirl.create(:group_type, :cms_access => true))
-      Cms::Authoring::EDITOR_PERMISSIONS.each do |p|
-        group.permissions << create_or_find_permission_named(p)
-      end
-      user.groups << group
-    }
-  end
+#   factory :user, :class => Cms::User do |m|
+#     m.first_name "Test"
+#     m.last_name "User"
+#     m.sequence(:login) { |n| "test_#{n}" }
+#     m.email { |a| "#{a.login}@example.com" }
+#     m.password "password"
+#     m.password_confirmation { |a| a.password }
+#   end
+#
+# # Represents a user who has actually created an account on the site.
+#   factory :registered_user, :parent => :user do |u|
+#     u.after(:create) { |user|
+#       user.groups << Cms::Group.guest
+#     }
+#   end
+#
+#   factory :disabled_user, parent: :user do |u|
+#     u.after(:create) { |user|
+#       user.disable!
+#     }
+#   end
+#
+#   factory :cms_admin, :parent => :user do |m|
+#     m.after(:create) { |user|
+#       group = FactoryGirl.create(:group, :group_type => FactoryGirl.create(:group_type, :cms_access => true))
+#       Cms::Authoring::PERMISSIONS.each do |p|
+#         group.permissions << create_or_find_permission_named(p)
+#       end
+#       user.groups << group
+#     }
+#   end
+#
+#   factory :content_editor, :parent => :user do |m|
+#     m.after(:create) { |user|
+#       group = FactoryGirl.create(:group, :group_type => FactoryGirl.create(:group_type, :cms_access => true))
+#       Cms::Authoring::EDITOR_PERMISSIONS.each do |p|
+#         group.permissions << create_or_find_permission_named(p)
+#       end
+#       user.groups << group
+#     }
+#   end
 
   # This is just for CMS testing
   factory :portlet_with_helper, :class => UsesHelperPortlet do |portlet|

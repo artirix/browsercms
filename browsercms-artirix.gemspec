@@ -2,11 +2,11 @@ require File.dirname(__FILE__) + "/lib/cms/version.rb"
 
 Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
-  s.name = "browsercms-artirix"
+  s.name = 'browsercms-artirix'
   s.version = Cms::VERSION
 
-  s.authors = ["BrowserMedia"]
-  s.homepage = "http://www.browsercms.org"
+  s.authors = ['BrowserMedia']
+  s.homepage = 'http://www.browsercms.org'
   s.summary = %q{Web Content Management in Rails}
   s.description = %q{BrowserCMS is a general purpose, open source Web Content Management System (CMS) that supports Ruby on Rails v4.0. It can be used as a standalone CMS, added to existing Rails projects or extended using Rails Engines.}
   s.email = %q{github@browsermedia.com}
@@ -18,20 +18,22 @@ Gem::Specification.new do |s|
   }
   s.required_ruby_version = '>= 1.9.2'
 
-  s.files = Dir["{app,bin,db,doc,lib,vendor}/**/*"]
-  s.files += Dir[".yardopts"]
-  s.files += Dir["config/routes.rb"]
-  s.files -= Dir["lib/tasks/**/*"]
-  s.files += Dir["lib/tasks/cms.rake"]
+  s.files = Dir['{app,bin,db,doc,lib,vendor}/**/*']
+  s.files += Dir['.yardopts']
+  s.files += Dir['config/routes.rb']
+  s.files -= Dir['lib/tasks/**/*']
+  s.files += Dir['lib/tasks/cms.rake']
 
   # Test files are not used and throwing 'Gem::Package::TooLongFileName' errors during packaging, so we are going to skip for now.
-  #s.test_files = Dir["test/**/*"]
-  #s.files -= Dir["test/dummy/*"]
+  #s.test_files = Dir['test/**/*']
+  #s.files -= Dir['test/dummy/*']
 
-  s.executables = ["bcms", "browsercms"]
+  s.executables = ['bcms', 'browsercms']
 
   s.add_dependency 'rails', '~> 4.0.13'
-  s.add_dependency 'devise', '~> 3.0'
+  # s.add_dependency 'devise', '~> 3.0'
+
+  s.add_dependency 'cancancan'
 
   # specific dependencies for fixing compass-rails problem
   s.add_dependency 'sass-rails'
