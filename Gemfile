@@ -1,4 +1,8 @@
-source 'http://rubygems.org'
+if system('ping -c1 gemcache.ldn.uk.office.artirix.com >/dev/null 2>&1')
+  source 'http://gemcache.ldn.uk.office.artirix.com'
+else
+  source 'https://rubygems.org'
+end
 
 # Load this project as a gem.
 gemspec name: 'browsercms-artirix'
@@ -17,7 +21,7 @@ gem 'bluecloth', groups: [:development, :test] # For YARD
 
 gem 'thin' # To avoid annoying Ruby 1.9.3/Rails/Webrick warnings - See http://stackoverflow.com/questions/7082364/what-does-warn-could-not-determine-content-length-of-response-body-mean-and-h
 
-# Uncomment to confirm that older versions work (for compaitiblity with Spree 2.2.4/bcms_spree)
+# Uncomment to confirm that older versions work (for compatibility with Spree 2.2.4/bcms_spree)
 # gem 'paperclip', '~> 3.4.1'
 # For testing behavior in production
 group :production do
