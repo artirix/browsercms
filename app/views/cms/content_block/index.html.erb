@@ -18,9 +18,11 @@
     <span class="span9 top-buttons">
         <%= submit_tag "Publish", class: "right btn btn-small btn-primary primary-cta" if content_type.model_class.publishable? %>
 
-        <div class="btn-group right">
-          <%= submit_tag "Delete", class: 'btn btn-small', data: {confirm: 'Are you sure you want to delete all these records?'} %>
-        </div>
+        <% unless content_type.readonly? %>
+          <div class="btn-group right">
+            <%= submit_tag "Delete", class: 'btn btn-small', data: {confirm: 'Are you sure you want to delete all these records?'} %>
+          </div>
+        <% end %>
 
         <%= yield :bulk_actions if content_for?(:bulk_actions) %>
         <h4 class="right"><%= @total_number_of_items %> ITEMS</h4>
