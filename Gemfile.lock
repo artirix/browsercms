@@ -22,7 +22,7 @@ PATH
       will_paginate (~> 3.0.0)
 
 GEM
-  remote: http://gemcache.ldn.uk.office.artirix.com/
+  remote: https://rubygems.org/
   specs:
     actionmailer (4.0.13)
       actionpack (= 4.0.13)
