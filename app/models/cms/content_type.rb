@@ -139,6 +139,10 @@ module Cms
       model_class.respond_to?(:form) ? model_class.form : "#{name.underscore.pluralize}/form"
     end
 
+    def menu_name
+      model_class.respond_to?(:menu_name) ? model_class.menu_name : display_name
+    end
+
     def display_name
       model_class.respond_to?(:display_name) ? model_class.display_name : Cms::Behaviors::Connecting.default_naming_for(model_class)
     end
