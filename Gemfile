@@ -6,7 +6,7 @@ end
 
 # Load this project as a gem.
 gemspec name: 'browsercms-artirix'
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.17'
 
 gem 'sass-rails', '5.0.1'
 gem 'compass', '1.0.3'
