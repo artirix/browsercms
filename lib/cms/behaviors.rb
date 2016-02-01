@@ -34,6 +34,24 @@ end
 
 module ARCompatibilityModule
   # TODO: modification of changed_attributes is forbidden in later rails -> find alternative
+  # (looks like we can do it by modifying `@changed_attributes` instead of `changed_attributes`)
+
+  def compatible_add_changed_attribute(attribute, change)
+    # first call it so it's initialized:
+    changed_attributes
+    # then use the instance variable ot modify it
+    @changed_attributes[attribute] = change
+  end
+
+
+  def compatible_remove_changed_attribute(attribute)
+    # first call it so it's initialized:
+    changed_attributes
+    # then use the instance variable ot modify it
+    @changed_attributes.delete attribute
+  end
+
+
 
   def compatible_clear_changes_information
     # for rails 4.2 compat

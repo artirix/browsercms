@@ -30,7 +30,7 @@ module Cms
           scope :unpublished, -> {
             if self.versioned?
               q = "#{connection.quote_table_name(version_table_name)}.#{connection.quote_column_name('version')} > " +
-                  "#{connection.quote_table_name(table_name)}.#{connection.quote_column_name('version')}"
+                "#{connection.quote_table_name(table_name)}.#{connection.quote_column_name('version')}"
               select("distinct #{connection.quote_table_name(table_name)}.*").where(q).joins(:versions)
             else
               where(:published => false)
@@ -146,15 +146,24 @@ module Cms
                   end
 
                   # Doing the SQL ourselves to avoid callbacks
-                  self.class.unscoped.where(self.class.arel_table[self.class.primary_key].eq(id)).arel.update(quoted_attributes)
+                  rel  = self.class.unscoped.where(self.class.arel_table[self.class.primary_key].eq(id))
+                  arel = rel.try :arel
+
+                  if arel && arel.respond_to?(:update)
+                    arel.update(quoted_attributes)
+                  else # newer rails
+                    upm = rel.compile_update(quoted_attributes, id)
+                    self.class.connection.execute upm.to_sql
+                  end
+
                   did_publish = true
                 end
               else
                 self.class.connection.update(
-                    "UPDATE #{self.class.quoted_table_name} " +
-                        "SET published = #{self.class.connection.quote(true, self.class.columns_hash["published"])} " +
-                        "WHERE #{self.class.connection.quote_column_name(self.class.primary_key)} = #{self.class.quote_value(id)}",
-                    "#{self.class.name.demodulize} Publish"
+                  "UPDATE #{self.class.quoted_table_name} " +
+                    "SET published = #{self.class.connection.quote(true, self.class.columns_hash["published"])} " +
+                    "WHERE #{self.class.connection.quote_column_name(self.class.primary_key)} = #{self.class.quote_value(id)}",
+                  "#{self.class.name.demodulize} Publish"
                 )
                 did_publish = true
               end
