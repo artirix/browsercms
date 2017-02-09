@@ -50,7 +50,7 @@ module Cms
       # @return [Array<Cms::ContentType] An alphabetical list of content types.
       def available
         subclasses = ObjectSpace.each_object(::Class).select do |klass|
-          klass < Cms::Concerns::HasContentType::InstanceMethods
+          klass < Cms::Concerns::HasContentType::InstanceMethods && klass.name.present?
         end
         subclasses << Cms::Portlet
         subclasses.uniq! { |k| k.name } # filter duplicate classes

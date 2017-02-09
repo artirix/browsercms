@@ -20,7 +20,13 @@ class NamespacesTest < ActiveSupport::TestCase
           klass = klass_name.constantize
           if klass.class == Class
             subclasses << klass
-            subclasses += klass.send(:descendants).collect{|x| x.respond_to?(:constantize) ? x.constantize : x}
+            subclasses += klass.send(:descendants).collect do |x|
+              if x.kind_of? Class
+                x
+              else
+                x.try(:constantize) || x
+              end
+            end
           else
             subclasses += subclasses_from_module(klass_name)
           end

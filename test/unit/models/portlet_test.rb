@@ -83,6 +83,7 @@ class PortletTest < ActiveSupport::TestCase
   end
 
   test "attributes=" do
+    # note: fails in ruby 2.3.0
     @portlet.attributes=({:b => "b"})
     assert_equal "b", @portlet.b
   end
